@@ -11,5 +11,4 @@ public class Penulis extends User {
     public Buku tulisBuku(String judul) {
         return new Buku(judul, this);
     }
-
 }
