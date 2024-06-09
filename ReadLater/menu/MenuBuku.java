@@ -5,12 +5,12 @@ import java.util.Scanner;
 import models.Buku;
 import utils.ScreenHelper;
 import models.Menu;
+import repositories.BookRepository;
 
+public class MenuBuku extends Menu {
+    BookRepository data;
 
-public class MenuBuku extends Menu{
-    ArrayList<Buku> data;
-
-    public MenuBuku(ArrayList<Buku> data) {
+    public MenuBuku(BookRepository data) {
         this.data = data;
     }
 
@@ -40,14 +40,14 @@ public class MenuBuku extends Menu{
                     tampilData();
                     break;
                 // case 2:
-                //     tambah();
-                //     break;
+                // tambah();
+                // break;
                 // case 3:
-                //     edit();
-                //     break;
+                // edit();
+                // break;
                 // case 4:
-                //     hapus();
-                //     break;
+                // hapus();
+                // break;
                 case 0:
                     System.out.println("+=============================================+");
                     System.out.println("|            KEMBALI KE MENU UTAMA            |");
@@ -67,10 +67,10 @@ public class MenuBuku extends Menu{
             System.out.println("+=============================================+");
             System.out.println("|               TAMPIL DATA BUKU              |");
             System.out.println("+=============================================+");
-            for (Buku tempBuku : data) {
+            for (Buku tempBuku : data.getAll()) {
                 System.out.println("Judul Buku    : " + tempBuku.getJudul());
-                System.out.println("Penulis Buku  : " + tempBuku.getPenulis());
-                System.out.println("Penerbit Buku : " + tempBuku.getPenerbit());
+                System.out.println("Penulis Buku  : " + tempBuku.getPenulis().getName());
+                System.out.println("Penerbit Buku : " + tempBuku.getPenerbit().getName());
                 System.out.println("Tahun Terbit  : " + tempBuku.getTahunTerbit());
                 System.out.println("+=============================================+");
             }
@@ -92,7 +92,7 @@ public class MenuBuku extends Menu{
                 System.out.println("+=============================================+");
                 System.out.println("|                  PILIH BUKU                 |");
                 System.out.println("+=============================================+");
-                for (Buku tempBuku : data) {
+                for (Buku tempBuku : data.getAll()) {
                     System.out.println("Judul Buku    : " + tempBuku.getJudul());
                     System.out.println("Penulis Buku  : " + tempBuku.getPenulis());
                     System.out.println("Penerbit Buku : " + tempBuku.getPenerbit());
@@ -103,7 +103,7 @@ public class MenuBuku extends Menu{
                 System.out.print("Silakan pilih kode buku : ");
                 judulBuku = input.nextLine();
                 for (int i = 0; i < data.size(); i++) {
-                    if (data.get(i).getJudul().equals(judulBuku)) {
+                    if (data.getById(i).getJudul().equals(judulBuku)) {
                         bukuDipilih = i;
                         break;
                     }
@@ -118,69 +118,69 @@ public class MenuBuku extends Menu{
 
     // @Override
     // public void tambah() {
-    //     ScreenHelper.clearConsole();
-    //     System.out.println("+=============================================+");
-    //     System.out.println("|               TAMBAH DATA BUKU              |");
-    //     System.out.println("+=============================================+");
-    //     Buku tempBuku = new Buku();
-    //     System.out.print("Judul Buku    : ");
-    //     tempBuku.setJudul(input.nextLine());
-    //     System.out.print("Penulis Buku  : ");
-    //     tempBuku.setPenulis(input.nextLine());
-    //     System.out.print("Penerbit Buku : ");
-    //     tempBuku.setPenerbit(input.nextLine());
-    //     System.out.print("Tahun Terbit  : ");
-    //     tempBuku.setTahunTerbit(input.nextLine());
-    //     System.out.print("Jumlah Buku   : ");
-    //     tempBuku.setJumlah(input.nextInt());
-    //     input.nextLine();
-    //     data.add(tempBuku);
-    //     System.out.println("+=============================================+");
-    //     System.out.println("|              DATA BUKU TERSIMPAN            |");
-    //     System.out.println("+=============================================+");
-    //     input.nextLine();
+    // ScreenHelper.clearConsole();
+    // System.out.println("+=============================================+");
+    // System.out.println("| TAMBAH DATA BUKU |");
+    // System.out.println("+=============================================+");
+    // Buku tempBuku = new Buku();
+    // System.out.print("Judul Buku : ");
+    // tempBuku.setJudul(input.nextLine());
+    // System.out.print("Penulis Buku : ");
+    // tempBuku.setPenulis(input.nextLine());
+    // System.out.print("Penerbit Buku : ");
+    // tempBuku.setPenerbit(input.nextLine());
+    // System.out.print("Tahun Terbit : ");
+    // tempBuku.setTahunTerbit(input.nextLine());
+    // System.out.print("Jumlah Buku : ");
+    // tempBuku.setJumlah(input.nextInt());
+    // input.nextLine();
+    // data.add(tempBuku);
+    // System.out.println("+=============================================+");
+    // System.out.println("| DATA BUKU TERSIMPAN |");
+    // System.out.println("+=============================================+");
+    // input.nextLine();
     // }
 
     // @Override
     // public void edit() {
-    //     ScreenHelper.clearConsole();
-    //     int indexBuku = pilih();
-    //     if (indexBuku != -1) {
-    //         Buku editBuku = data.get(indexBuku);
-    //         System.out.println("+=============================================+");
-    //         System.out.println("|                EDIT DATA BUKU               |");
-    //         System.out.println("+=============================================+");
-    //         System.out.print("Kode Buku     : ");
-    //         editBuku.setKode(input.nextLine());
-    //         System.out.print("Judul Buku    : ");
-    //         editBuku.setJudul(input.nextLine());
-    //         System.out.print("Penulis Buku  : ");
-    //         editBuku.setPenulis(input.nextLine());
-    //         System.out.print("Penerbit Buku : ");
-    //         editBuku.setPenerbit(input.nextLine());
-    //         System.out.print("Tahun Terbit  : ");
-    //         editBuku.setTahunTerbit(input.nextLine());
-    //         System.out.print("Jumlah Buku   : ");
-    //         editBuku.setJumlah(input.nextInt());
-    //         data.set(indexBuku, editBuku);
-    //         System.out.println("+=============================================+");
-    //         System.out.println("|              DATA BUKU TERSIMPAN            |");
-    //         System.out.println("+=============================================+");
-    //         input.nextLine();
-    //         input.nextLine();
-    //     }
+    // ScreenHelper.clearConsole();
+    // int indexBuku = pilih();
+    // if (indexBuku != -1) {
+    // Buku editBuku = data.get(indexBuku);
+    // System.out.println("+=============================================+");
+    // System.out.println("| EDIT DATA BUKU |");
+    // System.out.println("+=============================================+");
+    // System.out.print("Kode Buku : ");
+    // editBuku.setKode(input.nextLine());
+    // System.out.print("Judul Buku : ");
+    // editBuku.setJudul(input.nextLine());
+    // System.out.print("Penulis Buku : ");
+    // editBuku.setPenulis(input.nextLine());
+    // System.out.print("Penerbit Buku : ");
+    // editBuku.setPenerbit(input.nextLine());
+    // System.out.print("Tahun Terbit : ");
+    // editBuku.setTahunTerbit(input.nextLine());
+    // System.out.print("Jumlah Buku : ");
+    // editBuku.setJumlah(input.nextInt());
+    // data.set(indexBuku, editBuku);
+    // System.out.println("+=============================================+");
+    // System.out.println("| DATA BUKU TERSIMPAN |");
+    // System.out.println("+=============================================+");
+    // input.nextLine();
+    // input.nextLine();
+    // }
     // }
 
     // public void hapus() {
-    //     ScreenHelper.clearConsole();
-    //     int indexBuku = pilih();
-    //     if (indexBuku != -1) {
-    //         data.remove(indexBuku);
-    //         System.out.println("+=============================================+");
-    //         System.out.println("|               DATA BUKU DIHAPUS             |");
-    //         System.out.println("+=============================================+");
-    //         input.nextLine();
-    //     }
+    // ScreenHelper.clearConsole();
+    // int indexBuku = pilih();
+    // if (indexBuku != -1) {
+    // data.remove(indexBuku);
+    // System.out.println("+=============================================+");
+    // System.out.println("| DATA BUKU DIHAPUS |");
+    // System.out.println("+=============================================+");
+    // input.nextLine();
+    // }
     // }
 
 }

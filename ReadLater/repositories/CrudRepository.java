@@ -34,4 +34,8 @@ public abstract class CrudRepository<T extends WithId> {
     public void delete(T obj) {
         repo.remove(obj);
     }
+
+    public int size() {
+        return repo.size();
+    }
 }

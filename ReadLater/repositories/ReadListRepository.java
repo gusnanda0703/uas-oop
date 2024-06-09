@@ -13,12 +13,12 @@ public class ReadListRepository extends CrudRepository<ReadList> {
         super(repo);
     }
 
-    public List<Buku> listBukuByPengguna(Pengguna pengguna) {
-        List<Buku> books = new ArrayList<>();
+    public List<ReadList> listBukuByPengguna(Pengguna pengguna) {
+        List<ReadList> books = new ArrayList<>();
 
         for (var readList : super.repo) {
             if (readList.getPengguna().equals(pengguna)) {
-                books.add(readList.getBuku());
+                books.add(readList);
             }
         }
         return books;
