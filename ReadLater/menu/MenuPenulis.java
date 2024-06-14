@@ -1,16 +1,27 @@
 package menu;
 
-import java.util.Scanner;
-import models.Penulis;
-import utils.ScreenHelper;
+import java.util.ArrayList;
+import java.util.List;
+
+import enums.Role;
 import models.Menu;
-import repositories.PenulisRepository;
+import models.Penulis;
+import repositories.UserRepository;
+import utils.ScreenHelper;
 
 public class MenuPenulis extends Menu {
-    PenulisRepository data;
+    UserRepository data;
+    List<Penulis> listPenulis = new ArrayList<>();
 
-    public MenuPenulis(PenulisRepository data) {
+    public MenuPenulis(UserRepository data) {
         this.data = data;
+
+        // ambil data penulis
+        data.getAll().forEach(it -> {
+            if (it.getRole().equals(Role.PENULIS)) {
+                listPenulis.add((Penulis) it);
+            }
+        });
     }
 
     @Override
@@ -62,13 +73,14 @@ public class MenuPenulis extends Menu {
     @Override
     public void tampilData() {
         ScreenHelper.clearConsole();
-        if (data.size() > 0) {
+        if (listPenulis.size() > 0) {
             System.out.println("+=============================================+");
             System.out.println("|              TAMPIL DATA PENULIS            |");
             System.out.println("+=============================================+");
-            for (Penulis tempPenulis : data.getAll()) {
+
+            for (Penulis tempPenulis : listPenulis) {
                 System.out.println("Nama Penulis  : " + tempPenulis.getName());
-                System.out.println("Biografi      : " + tempPenulis.getBiography());
+                System.out.println("Biografi      : " + tempPenulis.getEmail());
                 System.out.println("+=============================================+");
             }
             input.nextLine();
@@ -84,22 +96,20 @@ public class MenuPenulis extends Menu {
         String namaPenulis = "";
         int penulisDipilih = -1;
 
-        if (data.size() > 0) {
+        if (listPenulis.size() > 0) {
             do {
                 System.out.println("+=============================================+");
                 System.out.println("|                 PILIH PENULIS               |");
                 System.out.println("+=============================================+");
-                for (Penulis tempPenulis : data.getAll()) {
-                    System.out.println("Nama Penulis  : " + tempPenulis.getName());
-                    System.out.println("Biografi      : " + tempPenulis.getBiography());
-                    System.out.println("+=============================================+");
+                for (Penulis tempPenulis : listPenulis) {
+                    System.out.printf("%d) %s", tempPenulis.getId(), tempPenulis.getName());
                 }
 
                 System.out.print("Silakan pilih nama penulis : ");
                 namaPenulis = input.nextLine();
-                for (int i = 0; i < data.size(); i++) {
-                    if (data.getById(i).getName().equals(namaPenulis)) {
-                        penulisDipilih = i;
+                for (int i = 0; i < listPenulis.size(); i++) {
+                    if (listPenulis.get(i).getName().equals(namaPenulis)) {
+                        penulisDipilih = listPenulis.get(i).getId();
                         break;
                     }
                 }

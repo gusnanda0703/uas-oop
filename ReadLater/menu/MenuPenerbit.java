@@ -1,15 +1,17 @@
 package menu;
 
-import java.util.Scanner;
-import models.Penulis;
-import utils.ScreenHelper;
+import java.util.List;
+
 import models.Menu;
-import repositories.PenulisRepository;
+import models.Penerbit;
+import repositories.UserRepository;
+import utils.ScreenHelper;
 
-public class MenuPenulis extends Menu {
-    PenulisRepository data;
+public class MenuPenerbit extends Menu {
+    UserRepository data;
+    List<Penerbit> listPenulis;
 
-    public MenuPenulis(PenulisRepository data) {
+    public MenuPenerbit(UserRepository data) {
         this.data = data;
     }
 
@@ -19,15 +21,15 @@ public class MenuPenulis extends Menu {
         do {
             ScreenHelper.clearConsole();
             System.out.println("+=============================================+");
-            System.out.println("|                DATA PENULIS                 |");
+            System.out.println("|                DATA Penerbit                 |");
             System.out.println("+=============================================+");
-            System.out.println("| 1 | Tampil Penulis                          |");
+            System.out.println("| 1 | Tampil Penerbit                          |");
             System.out.println("+---+-----------------------------------------+");
-            System.out.println("| 2 | Tambah Penulis                          |");
+            System.out.println("| 2 | Tambah Penerbit                          |");
             System.out.println("+---+-----------------------------------------+");
-            System.out.println("| 3 | Edit Penulis                            |");
+            System.out.println("| 3 | Edit Penerbit                            |");
             System.out.println("+---+-----------------------------------------+");
-            System.out.println("| 4 | Hapus Penulis                           |");
+            System.out.println("| 4 | Hapus Penerbit                           |");
             System.out.println("+---+-----------------------------------------+");
             System.out.println("| 0 | Kembali                                 |");
             System.out.println("+=============================================+");
@@ -64,16 +66,16 @@ public class MenuPenulis extends Menu {
         ScreenHelper.clearConsole();
         if (data.size() > 0) {
             System.out.println("+=============================================+");
-            System.out.println("|              TAMPIL DATA PENULIS            |");
+            System.out.println("|              TAMPIL DATA Penerbit            |");
             System.out.println("+=============================================+");
-            for (Penulis tempPenulis : data.getAll()) {
-                System.out.println("Nama Penulis  : " + tempPenulis.getName());
-                System.out.println("Biografi      : " + tempPenulis.getBiography());
+            for (Penerbit penerbit : data.getPenerbits()) {
+                System.out.println("Nama Penerbit  : " + penerbit.getName());
+                System.out.println("Biografi      : " + penerbit.getEmail());
                 System.out.println("+=============================================+");
             }
             input.nextLine();
         } else {
-            System.out.println("Data penulis kosong, silakan tambahkan data.");
+            System.out.println("Data Penerbit kosong, silakan tambahkan data.");
             input.nextLine();
         }
     }
@@ -87,15 +89,15 @@ public class MenuPenulis extends Menu {
         if (data.size() > 0) {
             do {
                 System.out.println("+=============================================+");
-                System.out.println("|                 PILIH PENULIS               |");
+                System.out.println("|                 PILIH Penerbit               |");
                 System.out.println("+=============================================+");
-                for (Penulis tempPenulis : data.getAll()) {
-                    System.out.println("Nama Penulis  : " + tempPenulis.getName());
-                    System.out.println("Biografi      : " + tempPenulis.getBiography());
+                for (Penerbit penerbit : data.getPenerbits()) {
+                    System.out.println("Nama Penerbit  : " + penerbit.getName());
+                    System.out.println("Biografi      : " + penerbit.getEmail());
                     System.out.println("+=============================================+");
                 }
 
-                System.out.print("Silakan pilih nama penulis : ");
+                System.out.print("Silakan pilih nama Penerbit : ");
                 namaPenulis = input.nextLine();
                 for (int i = 0; i < data.size(); i++) {
                     if (data.getById(i).getName().equals(namaPenulis)) {
@@ -105,7 +107,7 @@ public class MenuPenulis extends Menu {
                 }
             } while (penulisDipilih == -1);
         } else {
-            System.out.println("Data penulis kosong, silakan tambahkan data.");
+            System.out.println("Data Penerbit kosong, silakan tambahkan data.");
             input.nextLine();
         }
         return penulisDipilih;
