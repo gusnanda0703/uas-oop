@@ -24,4 +24,13 @@ public class ReadListRepository extends CrudRepository<ReadList> {
         return books;
     }
 
+    public boolean isExist(Pengguna pengguna, Buku buku) {
+        for (var readList : super.repo) {
+            if (readList.getPengguna().equals(pengguna) && readList.getBuku().equals(buku)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 }

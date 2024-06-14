@@ -3,6 +3,7 @@ package menu;
 import java.util.ArrayList;
 import java.util.Scanner;
 
+import enums.Role;
 import utils.ScreenHelper;
 import repositories.UserRepository;
 import repositories.BookRepository;
@@ -14,17 +15,26 @@ public class MainMenu {
     private UserRepository users;
     private BookRepository books;
     private ReadListRepository readList;
-    private MenuBuku menuBuku;
 
     private Scanner input = new Scanner(System.in);
+    private MenuBuku menuBuku;
+    private MenuPenulis menuPenulis;
+    private MenuPenerbit menuPenerbit;
     private MenuReadList readListMenu;
 
     public MainMenu(UserRepository users, BookRepository books, ReadListRepository readList, User auth) {
-        this.readListMenu = new MenuReadList(books, readList, (Pengguna) auth);
+        if (auth.getRole().equals(Role.ADMIN)) {
+            this.menuPenulis = new MenuPenulis(users);
+            this.menuPenerbit = new MenuPenerbit(users);
+            this.menuBuku = new MenuBuku(books);
+        }
+        if (auth.getRole().equals(Role.PENGGUNA)) {
+            this.readListMenu = new MenuReadList(books, readList, (Pengguna) auth);
+        }
         this.users = users;
         this.books = books;
         this.readList = readList;
-        this.menuBuku = new MenuBuku(books);
+
     }
 
     public void tampilMenu() {
@@ -36,7 +46,9 @@ public class MainMenu {
             System.out.println("+=============================================+");
             System.out.println("| 1 | Data Buku                               |");
             System.out.println("+---+-----------------------------------------+");
-            System.out.println("| 2 | Read List                               |");
+            System.out.println("| 2 | Read Penulist                           |");
+            System.out.println("+---+-----------------------------------------+");
+            System.out.println("| 3 | Read List                               |");
             System.out.println("+---+-----------------------------------------+");
             System.out.println("| 0 | Logout                                  |");
             System.out.println("+=============================================+");
@@ -49,6 +61,10 @@ public class MainMenu {
                     System.out.println("print menu buku");
                     break;
                 case 2:
+                    menuPenulis.tampilMenu();
+                    System.out.println("print menu readlist");
+                    break;
+                case 3:
                     readListMenu.tampilMenu();
                     System.out.println("print menu readlist");
                     break;

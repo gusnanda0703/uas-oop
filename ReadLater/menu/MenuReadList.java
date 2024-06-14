@@ -1,7 +1,10 @@
 package menu;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Scanner;
 
+import models.Buku;
 import models.Pengguna;
 import models.ReadList;
 import repositories.BookRepository;
@@ -14,7 +17,10 @@ public class MenuReadList {
     private ReadListRepository readList;
     private Pengguna auth;
 
+    private List<Buku> bukuNotInReadList;
+
     public MenuReadList(BookRepository books, ReadListRepository readList, Pengguna auth) {
+        this.bukuNotInReadList = books.getAll().stream().filter(it -> !readList.isExist(auth, it)).toList();
         this.books = books;
         this.readList = readList;
         this.auth = auth;
@@ -33,8 +39,8 @@ public class MenuReadList {
             System.out.println("+---+-----------------------------------------+");
             // System.out.println("| 3 | Detail ReadList |");
             // System.out.println("+---+-----------------------------------------+");
-            // System.out.println("| 4 | Hapus ReadList |");
-            // System.out.println("+---+-----------------------------------------+");
+            System.out.println("| 4 | Hapus ReadList                          |");
+            System.out.println("+---+-----------------------------------------+");
             System.out.println("| 0 | Kembali                                 |");
             System.out.println("+=============================================+");
             System.out.print("\nSilakan masukan pilihan anda (0...4) : ");
@@ -71,9 +77,11 @@ public class MenuReadList {
         System.out.println("|              TAMPIL DATA ReadList           |");
         System.out.println("+=============================================+");
         for (var readList : readList.listBukuByPengguna(auth)) {
-            System.out.println("ID          : " + readList.getId());
-            System.out.println("Judul Buku  : " + readList.getBuku().getJudul());
-            System.out.println("Nama User   : " + readList.getPengguna().getName());
+            System.out.println("ID              : " + readList.getId());
+            System.out.println("Judul Buku      : " + readList.getBuku().getJudul());
+            System.out.println("Nama Pengarang  : " + readList.getBuku().getPenulis().getName());
+            System.out.println("Nama Penerbit   : " + readList.getBuku().getPenerbit().getName());
+            System.out.println("Nama Pengguna   : " + readList.getPengguna().getName());
             System.out.println("+=============================================+");
 
         }
@@ -87,88 +95,66 @@ public class MenuReadList {
         System.out.println("+=============================================+");
 
         System.out.println("Silahkah pilih buku yang akan dipeminjaman!");
-        books.getAll().forEach(book -> {
+        bukuNotInReadList.forEach(book -> {
             System.out.println("ID          : " + book.getId());
             System.out.println("Judul Buku  : " + book.getJudul());
             System.out.println("+=============================================+");
         });
         System.out.print("Masukan ID Buku : ");
 
+        // priksa apakah buku ada di list buku yang bisa dipinjam
         int idBuku = input.nextInt();
-        var book = books.getById(idBuku);
+        var book = bukuNotInReadList.stream().filter(it -> it.getId() == idBuku).findFirst().orElse(null);
         if (book == null) {
             System.out.println("Buku tidak ditemukan.");
             input.nextLine();
             return;
         }
 
-        readList.listBukuByPengguna(auth).forEach(read -> {
-            if (read.getBuku().equals(book)) {
-                System.out.println("Buku sudah ada di ReadList.");
-                input.nextLine();
-                return;
-            }
-        });
-
+        // tambahkan buku ke list peminjaman
         readList.add(new ReadList(auth, book));
         input.nextLine();
 
     }
 
-    // // public void hapus() {
-    // int indexPeminjaman = pilih();
-    // if (indexPeminjaman != -1) {
-    // data.remove(indexPeminjaman);
-    // System.out.println("+=============================================+");
-    // System.out.println("| DATA PEMINJAMAN DIHAPUS |");
-    // System.out.println("+=============================================+");
-    // input.nextLine();
-    // }
-    // }
+    public void hapus() {
+        int indexPeminjaman = pilih();
+        if (indexPeminjaman != -1) {
+            readList.delete(readList.getById(indexPeminjaman));
+            System.out.println("+=============================================+");
+            System.out.println("| DATA PEMINJAMAN DIHAPUS |");
+            System.out.println("+=============================================+");
+            input.nextLine();
+        }
+    }
 
-    // // public int pilih() {
-    // ScreenHelper.clearConsole();
-    // int peminjamanDipilih = -1;
+    public int pilih() {
+        ScreenHelper.clearConsole();
+        int peminjamanDipilih = -1;
 
-    // if (data.size() > 0) {
-    // do {
-    // System.out.println("+=============================================+");
-    // System.out.println("| PILIH PEMINJAMAN |");
-    // System.out.println("+=============================================+");
-    // for (int index = 0; index < data.size(); index++) {
-    // Peminjaman tempPeminjaman = data.get(index);
-    // System.out.println("INDEX : " + index);
+        if (readList.size() > 0) {
+            do {
+                System.out.println("+=============================================+");
+                System.out.println("| PILIH PEMINJAMAN |");
+                System.out.println("+=============================================+");
+                for (var read : readList.listBukuByPengguna(auth)) {
+                    System.out.println("ID              : " + read.getId());
+                    System.out.println("Judul Buku      : " + read.getBuku().getJudul());
+                    System.out.println("Nama Pengarang  : " + read.getBuku().getPenulis().getName());
+                    System.out.println("Nama Penerbit   : " + read.getBuku().getPenerbit().getName());
+                    System.out.println("Nama Pengguna   : " + read.getPengguna().getName());
+                    System.out.println("+=============================================+");
+                }
 
-    // System.out.println("ID Peminjaman : " + tempPeminjaman.getIdPeminjaman());
-    // System.out.println("Nama Peminjaman : " +
-    // tempPeminjaman.getPeminjam().getNama());
-    // System.out.println("Petugas Peminjaman : " +
-    // tempPeminjaman.getPetugasPeminjaman().getNama());
-    // System.out.println("Tanggal Peminjaman : " +
-    // tempPeminjaman.getTanggalPeminjaman());
-    // System.out.println("Batas Pengembalian : " +
-    // tempPeminjaman.getBatasPengembalian());
-    // System.out
-    // .println("Tanggal Pengembalian : " + (tempPeminjaman.getTanggalPengembalian()
-    // == null ? "-"
-    // : tempPeminjaman.getTanggalPengembalian()));
-    // System.out
-    // .println("Petugas Pengembalian : " + (tempPeminjaman.getPetugasPengembalian()
-    // == null ? "-"
-    // : tempPeminjaman.getPetugasPengembalian().getNama()));
-    // System.out.println("Denda : Rp " + tempPeminjaman.getDenda());
-    // System.out.println("+=============================================+");
-    // }
+                System.out.print("Silakan pilih INDEX ReadLIst : ");
+                peminjamanDipilih = input.nextInt();
+                input.nextLine();
+            } while (peminjamanDipilih == -1);
+        } else {
+            System.out.println("Data ReadLIst kosong, silakan tambahkan data.");
+            input.nextLine();
+        }
+        return peminjamanDipilih;
 
-    // System.out.print("Silakan pilih INDEX Peminjaman : ");
-    // peminjamanDipilih = input.nextInt();
-    // input.nextLine();
-    // } while (peminjamanDipilih == -1);
-    // } else {
-    // System.out.println("Data Peminjaman kosong, silakan tambahkan data.");
-    // input.nextLine();
-    // }
-    // return peminjamanDipilih;
-
-    // }
+    }
 }
