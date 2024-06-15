@@ -4,9 +4,9 @@ import java.util.List;
 
 import models.Buku;
 
-public class BookRepository extends CrudRepository<Buku> {
+public class BukuRepository extends CrudRepository<Buku> {
 
-    public BookRepository(List<Buku> repo) {
+    public BukuRepository(List<Buku> repo) {
         super(repo);
     }
 
@@ -19,4 +19,7 @@ public class BookRepository extends CrudRepository<Buku> {
         return null;
     }
 
+    public List<Buku> listBukuTidakDalamIds(List<Integer> ids) {
+        return super.repo.stream().filter(buku -> !ids.contains(buku.getId())).toList();
+    }
 }
