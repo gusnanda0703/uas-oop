@@ -37,8 +37,16 @@ public class Buku implements WithId {
         return judul;
     }
 
+    public void setJudul(String judul) {
+        this.judul = judul;
+    }
+
     public Penulis getPenulis() {
         return penulis;
+    }
+
+    public void setPenulis(Penulis penulis) {
+        this.penulis = penulis;
     }
 
     public Penerbit getPenerbit() {

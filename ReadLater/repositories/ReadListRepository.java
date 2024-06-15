@@ -2,6 +2,7 @@ package repositories;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import models.Buku;
 import models.Pengguna;
@@ -13,15 +14,15 @@ public class ReadListRepository extends CrudRepository<ReadList> {
         super(repo);
     }
 
-    public List<ReadList> listBukuByPengguna(Pengguna pengguna) {
-        List<ReadList> books = new ArrayList<>();
+    public List<ReadList> listReadListByPengguna(Pengguna pengguna) {
+        List<ReadList> read = new ArrayList<>();
 
         for (var readList : super.repo) {
             if (readList.getPengguna().equals(pengguna)) {
-                books.add(readList);
+                read.add(readList);
             }
         }
-        return books;
+        return read;
     }
 
     public boolean isExist(Pengguna pengguna, Buku buku) {

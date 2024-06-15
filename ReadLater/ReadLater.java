@@ -2,7 +2,7 @@ import java.util.Scanner;
 
 import menu.MainMenu;
 import models.User;
-import repositories.BookRepository;
+import repositories.BukuRepository;
 import repositories.ReadListRepository;
 import repositories.UserRepository;
 import utils.ScreenHelper;
@@ -10,41 +10,36 @@ import utils.ScreenHelper;
 public class ReadLater {
 
     private static Scanner scanner = new Scanner(System.in);
-    private static boolean isRunning = true;
-    private static User auth;
-
-    private static UserRepository users = new UserRepository(Seeder.seedUser());
-    private static BookRepository books = new BookRepository(Seeder.seedBuku());
-    private static ReadListRepository readList = new ReadListRepository(Seeder.seedReadList());
 
     public static void main(String[] args) {
+        UserRepository users = new UserRepository(Seeder.seedUser());
+        BukuRepository books = new BukuRepository(Seeder.seedBuku());
+        ReadListRepository readList = new ReadListRepository(Seeder.seedReadList());
+
+        boolean isRunning = true;
+        User auth = null;
 
         while (isRunning) {
-            showMenu();
-        }
+            while (auth == null) {
+                auth = login(users);
+            }
+            new MainMenu(users, books, readList, auth);
 
+            // logout
+            auth = null;
+
+            // close program
+            System.out.print("Apakah anda ingin menutup program? (y|N) : ");
+            String jawaban = scanner.nextLine();
+            if (jawaban.equalsIgnoreCase("y")) {
+                System.out.print("Terima kasih telah menggunakan program ini.");
+                isRunning = false;
+            }
+        }
+        scanner.close();
     }
 
-    private static void showMenu() {
-        while (auth == null) {
-            loginMenu();
-        }
-        MainMenu menuPerpustakaan = new MainMenu(users, books, readList, auth);
-        menuPerpustakaan.tampilMenu();
-
-        // logout
-        auth = null;
-
-        // close program
-        System.out.print("Apakah anda ingin menutup program? (y|N) : ");
-        String jawaban = scanner.nextLine();
-        if (jawaban.equalsIgnoreCase("y")) {
-            System.out.print("Terima kasih telah menggunakan program ini.");
-            isRunning = false;
-        }
-    }
-
-    private static void loginMenu() {
+    private static User login(UserRepository users) {
         ScreenHelper.clearConsole();
         System.out.println("+=============================================+");
         System.out.println("|                    LOGIN                    |");
@@ -58,10 +53,11 @@ public class ReadLater {
 
         var user = users.findFirstByEmail(email);
         if (user != null && user.getPassword().equals(password)) {
-            auth = user;
+            return user;
         } else {
             System.out.println("email atau password tidak ditemukan");
             scanner.nextLine();
+            return null;
         }
     }
 

@@ -28,10 +28,7 @@ public abstract class CrudRepository<T extends WithId> {
         return null;
     }
 
-    public void update(T obj) {
-    }
-
-    public void delete(T obj) {
+    public void remove(T obj) {
         repo.remove(obj);
     }
 
