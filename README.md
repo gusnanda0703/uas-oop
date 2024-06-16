@@ -1,16 +1,22 @@
 # uas-oop
 minial comand line app for manage book read list write in java
 
-## anggota: 
-- Chandra Setyawan
-- Agus Arya
-- Ardayana 
-- Bagus Nanda
+## anggota kelompok 3: 
+- I Putu Chandra Setyawan (220010010) 
+- I Putu Bagus Nanda Widnyana (220010031)
+- I Wayan Ardayana (220010086)
+- I Putu Gede Agus Arya Jaya Negara (220010137)
+
+
 
 ## entity:
-user
 book
+menu
+penerbit
+pengguna
+penulis
 readList
+user
 
 ## role:
 user
