@@ -10,29 +10,30 @@ minial comand line app for manage book read list write in java
 
 
 ## entity:
-book
-menu
-penerbit
-pengguna
-penulis
-readList
-user
-
-## role:
-user
-- admin
+- book
+- menu
+- penerbit
+- pengguna
 - penulis
-- penerbit
-- pengguna
+- readList
+- user
 
-## relation:
-user
-- readlist[]
+## fitur admin:
+- crud buku 
+- crud penulis
+- crud penerbit
+-crud pengguna 
 
-book
-- penulist
-- penerbit
+## fitur pengguna  
+- bisa tambah dan hapus readlist
 
-readlist:
-- buku
-- pengguna
+## fitur yang tidak terselesaikan 
+- menyimpan data pada file
+- penulis bisa login dan menambah buku
+- penerbit bisa login dan publish buku
+- user bisa registasi 
+
+## kendala yang di alami
+- Kurangnya pengalaman dalam manajemen proyek dan koordinasi tim.
+- Kesulitan dalam memenuhi semua kebutuhan fungsional dan non-fungsional yang telah direncanakan.
+- Tantangan dalam memahami dan mengimplementasikan konsep-konsep OOP secara menyeluruh
