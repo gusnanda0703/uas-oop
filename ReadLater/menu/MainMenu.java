@@ -17,6 +17,7 @@ public class MainMenu {
     private MenuPenulis menuPenulis;
     private MenuPenerbit menuPenerbit;
     private MenuReadList readListMenu;
+    private MenuPengguna menuPengguna;
 
     public MainMenu(UserRepository users, BukuRepository books, ReadListRepository readList, User auth) {
         this.input = new Scanner(System.in);
@@ -25,6 +26,7 @@ public class MainMenu {
                 this.menuPenulis = new MenuPenulis(users);
                 this.menuPenerbit = new MenuPenerbit(users);
                 this.menuBuku = new MenuBuku(books, menuPenerbit, menuPenulis);
+                this.menuPengguna = new MenuPengguna(users);
 
                 this.tampilMenuAdmin();
             }
@@ -68,7 +70,7 @@ public class MainMenu {
                 case 1 -> menuBuku.tampilMenu();
                 case 2 -> menuPenulis.tampilMenu();
                 case 3 -> menuPenerbit.tampilMenu();
-                case 4 -> readListMenu.tampilMenu();
+                case 4 -> menuPengguna.tampilMenu();
                 case 0 -> {
                     ScreenHelper.clearConsole();
                     System.out.println("+=============================================+");
